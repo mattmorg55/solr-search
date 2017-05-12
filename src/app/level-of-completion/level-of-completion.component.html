@@ -1,0 +1,8 @@
+<span [ngSwitch]="level">
+  <span *ngSwitchCase="completed" class="badge badge-pill badge-success">Complete</span>
+	<span *ngSwitchCase="_new" class="badge badge-pill badge-info">New</span>
+	<span *ngSwitchCase="inProgress" class="badge badge-pill badge-warning">In Progress</span>
+	<span *ngSwitchCase="unknown" class="badge badge-pill badge-default">Unknown</span>
+	<span *ngSwitchCase="abandoned" class="badge badge-pill badge-danger">Abandoned</span>
+	<span *ngSwitchDefault class="badge badge-pill badge-default">{{ level }}</span>
+</span>

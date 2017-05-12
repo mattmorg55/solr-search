@@ -1,0 +1,9 @@
+<span [ngSwitch]="status">
+  <span *ngSwitchCase="approved" class="badge badge-pill badge-success">Approved</span>
+	<span *ngSwitchCase="unknown" class="badge badge-pill badge-default">Unknown</span>
+	<span *ngSwitchCase="toBeReviewed" class="badge badge-pill badge-danger">Needs Review</span>
+	<span *ngSwitchCase="checkedOut" class="badge badge-pill badge-info">Checked Out</span>
+	<span *ngSwitchCase="preQA" class="badge badge-pill badge-primary">Pre-QA</span>
+	<span *ngSwitchCase="reviewed" class="badge badge-pill badge-warning">Reviewed</span>
+	<span *ngSwitchDefault class="badge badge-pill badge-default">{{ status }}</span>
+</span>

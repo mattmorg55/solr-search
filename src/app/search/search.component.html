@@ -1,0 +1,175 @@
+<div class="container">
+	<form>
+		<div class="row top-buffer">
+			<div class="col-md-3">
+				<input class="form-control" type="text" name="firstName" placeholder="First Name" [(ngModel)]="criteria.firstName"></div>
+			<div class="col-md-3">
+				<input class="form-control" type="text" name="lastName" placeholder="Last Name" [(ngModel)]="criteria.lastName"></div>
+			<div class="col-md-3">
+				<input class="form-control" type="text" name="ssn" placeholder="SSN" [(ngModel)]="criteria.ssn"></div>
+			<div class="col-md-3">
+				<input class="form-control" type="text" name="formResultId" placeholder="SIS ID" [(ngModel)]="criteria.formResultId"></div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-3">
+				<label for="enterprises">Enterprises</label>
+    		<select multiple class="form-control" id="enterprises" name="enterprises" [(ngModel)]="criteria.enterprises">
+					<option>SISOnline Demo</option>
+					<option>Alberta</option>
+					<option>SISOnline Testing</option>
+					<option>AAIDD</option>
+					<option>Michigan</option>
+					<option>Maryland</option>
+					<option>Georgia</option>
+					<option>Colorado</option>
+					<option>Iowa</option>
+					<option>North Dakota</option>
+    		</select>
+			</div>
+			<div class="col-md-3">
+				<label for="groups">Groups</label>
+    		<select multiple class="form-control" id="groups" name="groups" [(ngModel)]="criteria.groups">
+					<option>Demo Accounts 2</option>
+					<option>Demo Accounts 1</option>
+					<option>Enterprise Wide</option>
+					<option>SIS Devel Team</option>
+					<option>Region 5- Communicare, Inc</option>
+					<option>Region 4- LifeSkills, Inc</option>
+					<option>Region 8- Comprehend, Inc.</option>
+					<option>North Dakota</option>
+					<option>State of Maryland</option>
+					<option>Ingham</option>
+    		</select>
+			</div>
+			<div class="col-md-3">
+				<label for="interviewers">Interviewers</label>
+				<select multiple class="form-control" id="interviewers" name="interviewers" [(ngModel)]="criteria.interviewers">
+					<option>SISOnline</option>
+					<option>VAZero</option>
+					<option>wrSISTest</option>
+					<option>matt.sebenick</option>
+					<option>Test002</option>
+					<option>rbogard</option>
+					<option>NDUser</option>
+					<option>UasAdmin</option>
+					<option>lisa.kelly</option>
+					<option>wrSISDemo</option>
+				</select>
+				</div>
+			<div class="col-md-3">
+				<label for="trackingNumbers">Tracking Numbers</label>
+				<textarea class="form-control" id="trackingNumbers" name="trackingNumbers" [(ngModel)]="criteria.trackingNumbers"></textarea>
+				</div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-3">
+				<label for="updatedFrom">Updated</label>
+				<input type="date" id="updatedFrom" class="form-control" name="updatedFrom" placeholder="4/11/2017" [(ngModel)]="criteria.updatedFrom">
+			</div>
+			<div class="col-md-3">
+				<label for="updatedTo">&nbsp;</label>
+				<input type="date" class="form-control" id="updatedTo" name="updatedTo" placeholder="5/11/2017" [(ngModel)]="criteria.updatedTo">
+			</div>
+			<div class="col-md-3">
+				<label for="interviewedFrom">Interviewed</label>
+				<input type="date" id="interviewedFrom" class="form-control" name="interviewedFrom" placeholder="4/11/2017" [(ngModel)]="criteria.interviewedFrom">
+			</div>
+			<div class="col-md-3">
+				<label for="interviewedTo">&nbsp;</label>
+				<input type="date" class="form-control" id="interviewedTo" name="interviewedTo" placeholder="5/11/2017" [(ngModel)]="criteria.interviewedTo">
+			</div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-12">
+				<span class="float-right">
+				<button type="button" (click)="search()" class="btn btn-primary">Submit</button>
+				<button type="button" (click)="clear()" class="btn btn-secondary">Clear</button></span>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="container">
+	<!--<div *ngIf="queryMs != -1"><span class="badge badge-pill badge-default">Execution time (milliseconds): {{ queryMs }}</span></div>-->
+	
+	<div *ngIf="numFound != 0"><h6>Results {{ ((currentPage - 1) * rows) + 1 }} - {{ currentPage * rows }} of {{ numFound.toLocaleString() }} ({{ queryMs }} milliseconds)</h6></div>
+	<!--<nav aria-label="Paging component">
+		<ul class="pagination">
+			<li class="page-item"><a class="page-link" href="#" (click)="page(1)">First</a></li>
+			<li class="page-item"><a class="page-link" href="#" (click)="page(1)">Previous</a></li>
+			<li class="page-item"><a class="page-link" href="#" (click)="page(1)">1</a></li>
+			<li class="page-item"><a class="page-link" href="#" (click)="page(2)">2</a></li>
+			<li class="page-item"><a class="page-link" href="#" (click)="page(3)">3</a></li>
+			<li class="page-item"><a class="page-link" href="#">Next</a></li>
+			<li class="page-item"><a class="page-link" href="#">Last</a></li>
+		</ul>
+	</nav>-->
+			<!--<ul *ngIf="pages && pages.length" class="pagination">-->
+	<ul *ngIf="pages && pages.length" class="pagination">
+		<li class="page-item" [ngClass]="{disabled:currentPage === 1}">
+				<a class="page-link" href="#" (click)="page(1)">First</a>
+		</li>
+		<li class="page-item" [ngClass]="{disabled:currentPage === 1}">
+				<a class="page-link" href="#" (click)="page(currentPage - 1)">Previous</a>
+		</li>
+		<li class="page-item" *ngFor="let pageNumber of pages" [ngClass]="{active:currentPage === pageNumber}">
+				<a class="page-link" href="#" (click)="page(pageNumber)">{{pageNumber}}</a>
+		</li>
+		<li class="page-item" [ngClass]="{disabled:currentPage === totalPages || totalPages === 0}">
+				<a class="page-link" href="#" (click)="page(currentPage + 1)">Next</a>
+		</li>
+		<li class="page-item" [ngClass]="{disabled:currentPage === totalPages || totalPages === 0}">
+				<a class="page-link" href="#" (click)="page(totalPages)">Last</a>
+		</li>
+	</ul>
+	<div *ngFor="let f of formResults">
+		<div class="card">
+			<div class="card-block">
+				<div class="row">
+					<div class="col-md-9">
+							<h4 class="card-title">{{ f.firstName_t }} {{ f.lastName_t }}</h4>
+							<h6 class="card-subtitle mb-2 text-muted">{{ f.enterprise_t }}, {{ f.group_t }}, <span *ngIf="f.trackingNumber_t">Tracking Number {{ f.trackingNumber_t }}</span></h6>
+					</div>
+					<div class="col-md-3">
+							<div class="card-text float-right">
+								<div *ngIf="f.interviewed_dt" class="text-right">Interview {{ f.interviewed_dt | date: 'MM/dd/yyyy' }}</div>
+								<div class="text-right">Update {{ f.updated_dt | date: 'MM/dd/yyyy' }}</div>
+							</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-9">
+						<level-of-completion [level]="f.levelOfCompletion_t"></level-of-completion> <review-status [status]="f.reviewStatus_t"></review-status>
+					</div>
+					<div class="col-md-3">
+						<button type="button" class="btn btn-outline-primary btn-sm float-right"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Assessment {{ f.formResultId_t }}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--<h4>{{ f.formResultId_t }} {{ f.levelOfCompletion_t }} {{ f.reviewStatus_t }} {{ f.sisVersion_t }}</h4>
+		<small>Subject: {{ f.firstName_t }} {{ f.lastName_t }} {{ f.ssn_t }}</small><br>
+		<small>Interviewer: {{ f.interviewerUsername_t }} <span *ngIf="f.assignedUserId_t > 0">Assigned: {{ f.assignedUserId_t }}</span></small><br>
+		<small>Group: {{ f.group_t }} Enterprise: {{ f.enterprise_t }} <span *ngIf="f.trackingNumber_t">Tracking Number: {{ f.trackingNumber_t }}</span></small><br>
+		<small><span *ngIf="f.interviewed_dt">Interviewed: {{ f.interviewed_dt }} </span>Updated: {{ f.updated_dt }}</small>-->
+	</div>
+	<div class="top-buffer">
+		<ul *ngIf="pages && pages.length" class="pagination">
+			<li class="page-item" [ngClass]="{disabled:currentPage === 1}">
+					<a class="page-link" href="#" (click)="page(1)">First</a>
+			</li>
+			<li class="page-item" [ngClass]="{disabled:currentPage === 1}">
+					<a class="page-link" href="#" (click)="page(currentPage - 1)">Previous</a>
+			</li>
+			<li class="page-item" *ngFor="let pageNumber of pages" [ngClass]="{active:currentPage === pageNumber}">
+					<a class="page-link" href="#" (click)="page(pageNumber)">{{pageNumber}}</a>
+			</li>
+			<li class="page-item" [ngClass]="{disabled:currentPage === totalPages || totalPages === 0}">
+					<a class="page-link" href="#" (click)="page(currentPage + 1)">Next</a>
+			</li>
+			<li class="page-item" [ngClass]="{disabled:currentPage === totalPages || totalPages === 0}">
+					<a class="page-link" href="#" (click)="page(totalPages)">Last</a>
+			</li>
+		</ul>
+	</div>
+	<div class="top-buffer bottom-buffer"><a class="address-bar" href="{{ url }}">{{ displayUrl }}</a></div>
+</div>
